@@ -1,0 +1,15 @@
+{
+  "name": "react-workshop",
+  "version": "1.0.0",
+  "description": "promocode using react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "abinesh",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.28.2",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
