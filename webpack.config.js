@@ -1,7 +1,8 @@
 module.exports={
     devServer:{
         inline:true,
-        contentBase:'./public',
+        contentBase:'./src',
         port:3000
-    }
+    },
+    mode:'development'
 };
