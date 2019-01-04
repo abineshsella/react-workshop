@@ -2,11 +2,12 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import PromoDetails from './promodetails';
-
+import CircularIndeterminate from './others/loading';
 export default class PromoCode extends React.Component {
-   salesManDetail;
+   
    constructor(){
     super();
+    this.salesManDetail=undefined;
     this.state={
         list:[],
         extra:[]
@@ -23,11 +24,23 @@ export default class PromoCode extends React.Component {
     
    }
     render() {
-        return (<React.Fragment>{this.state.list.map((value,index) => (
-            <Grid key={value.PromoId} item>
-              <span className={"badge badge-"+(this.state.extra[index].daysRemaining>0 ?"primary":"danger")} style={{float:'right'}}>{this.state.extra[index].daysRemaining}</span><Paper className={ this.props.gridClass }><PromoDetails promoId={value.PromoId} indexId={index} promoDescription={value.Description} salesManName={this.state.extra[index].salesManName}/></Paper>
-            </Grid>
-          ))}</React.Fragment>);
+        let renderValue="";
+        if(this.state.list.length>0)
+        {
+            renderValue=(<React.Fragment>{this.state.list.map((value,index) => (
+                <Grid key={value.PromoId} item>
+                  <span className={"badge badge-"+(this.state.extra[index].daysRemaining>0 ?"primary":"danger")} style={{float:'right'}}>{this.state.extra[index].daysRemaining}</span>
+                  <Paper className={ this.props.gridClass }>
+                    <PromoDetails promo={value} indexId={index}  salesManName={this.state.extra[index].salesManName}/>
+                  </Paper>
+                </Grid>
+              ))}</React.Fragment>);
+        }
+        else
+        {
+            renderValue=<CircularIndeterminate/>;
+        }
+        return renderValue;
     }
 
     
@@ -42,7 +55,12 @@ export default class PromoCode extends React.Component {
                     detail={}
                     detail.imgName=promoId;
                     detail.daysRemaining=this.getDaysRemaining(resp[promoId]);
-                    detail.salesManName=this.getSalesManName(resp[promoId].SalesMan_Id)
+                    detail.salesManName=this.getSalesManName(resp[promoId].SalesMan_Id);
+                    detail.PromoId=resp[promoId].PromoId;
+                    detail.SalesMan_Id=resp[promoId].SalesMan_Id;
+                    detail.Validty_From=resp[promoId].Validty_From;
+                    detail.Validty_To=resp[promoId].Validty_To;
+                    detail.Product_Details=resp[promoId].Product_Details;
                     extraDetails.push(detail);
                 }
                 this.setState({list:resp,extra:extraDetails});
@@ -61,10 +79,11 @@ export default class PromoCode extends React.Component {
         let url="https://tewebservices.bansel.it/axerve/api/salesman";
         fetch(url).then((rsp)=>rsp.json()).then((resp)=>{
             this.salesManDetail=resp;
+
         })
     }
     getSalesManName(salesManId){
-        if(salesManId==undefined)
+        if(salesManId==null || salesManId=="")
         {
             return "";
         }

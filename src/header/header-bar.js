@@ -12,7 +12,11 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: '100%'
+  },
+  header:{
+    // color:'black',
+    // backgroundColor:'#03a9f4'
   },
   grow: {
     flexGrow: 1,
@@ -75,9 +79,9 @@ function SearchAppBar(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.header}>
           <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-            <MenuIcon />
+            <img style={{width:'26px',height:'26px'}} src="./img/favicon.ico"></img>
           </IconButton>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
             Promocode
