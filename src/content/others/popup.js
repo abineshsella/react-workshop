@@ -6,8 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import OutlinedTextFields from './text-fields';
+import AddIcon from '@material-ui/icons/Add';
 class AlertDialog extends React.Component {
   constructor(){
+    
       super();
       this.state = {
         open: false,
@@ -21,11 +23,21 @@ class AlertDialog extends React.Component {
         this.setState({ open: false });
       };
       this.editedPromoDetails=(details)=>{
-        this.state.promoDetails=details;
-        this.insertPromoDetails();
+        this.savedDetails=details;
       };
       this.savePromoDetails=()=>{
-        this.insertPromoDetails();
+        if(this.savedDetails!=null && this.savedDetails != undefined)
+        {
+          this.state.promoDetails=this.savedDetails;
+          if(this.props.isAdd != undefined && this.props.isAdd =='true')
+          {
+            this.addPromoDetails();
+          }
+          else
+          {
+          this.updatePromoDetails();
+          }
+        }
         this.handleClose();
       };
   }
@@ -33,18 +45,26 @@ class AlertDialog extends React.Component {
 
 
   render() {
+    this.title='';
+    if(this.props.isAdd !=undefined && this.props.isAdd=='true'){
+      this.title=<AddIcon/>;
+    }
+    else{
+      this.title=this.props.promoDetails.promo.PromoId;
+    }
+    
     return (
       <div>
         <a onClick={this.handleClickOpen} style={{cursor:'pointer',textDecoration:'underline'}}>
-          {this.props.promoDetails.promo.PromoId}</a>
-        
+            {this.title}</a>
+         
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Edit Promocode"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title"><span className="text-primary">{"Edit Promocode"}</span></DialogTitle>
           <DialogContent>
             
              <OutlinedTextFields  editPromoDetails={this.editedPromoDetails} promoDetails={this.props.promoDetails}/>
@@ -62,12 +82,21 @@ class AlertDialog extends React.Component {
       </div>
     );
   }
-  insertPromoDetails(){
-    let url='';
-    fetch.url(url,this.state.promoDetails.json()).then((res)=>res.json()).then((resp)=>{
-
+  updatePromoDetails(){
+    let url='http://172.17.4.63/PromoService/PromoCodeManagement/UpdatePromoCode';
+    fetch(url,{method:'POST',headers:{'Content-Type': 'application/json'},  mode: 'cors',body: JSON.stringify(this.state.promoDetails)}).then((res)=>res.json()).then((resp)=>{
+      alert("Success");
     });
-   }
+  }
+  addPromoDetails(){
+    this.props.afterCompleted();
+    // let url='http://172.17.4.63/PromoService/PromoCodeManagement/InsertPromoCode';
+    // fetch(url,{method:'POST',headers:{'Content-Type': 'application/json'},  mode: 'cors',body: JSON.stringify(this.state.promoDetails)}).then((res)=>res.json()).then((resp)=>{
+    //   alert("Success");
+    //   debugger;
+    //   this.props.afterCompleted();
+    // });
+  }
 }
 
 export default AlertDialog;
