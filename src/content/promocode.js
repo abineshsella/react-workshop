@@ -5,8 +5,8 @@ import Fab from '@material-ui/core/Fab';
 import PromoDetails from './promodetails';
 import CircularIndeterminate from './others/loading';
 import AlertDialog from './others/popup';
-
-
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
+import TransitionGroup from 'react-addons-transition-group';
 export default class PromoCode extends React.Component {
    
    constructor(){
@@ -16,14 +16,18 @@ export default class PromoCode extends React.Component {
     this.state={
         list:[],
         extra:[],
-        isInserted:false
+        isProcessing:null
     };
     this.getSalesManList();
     this.getProductList();
     this.promoCodeInsertedSuccessfully=()=>{
-        debugger;
         this.setState({
-            ['isInserted']:true
+            ['isProcessing']:false
+        })
+    }
+    this.promocodeProcessing=()=>{
+        this.setState({
+            ['isProcessing']:true
         })
     }
    }
@@ -39,17 +43,20 @@ export default class PromoCode extends React.Component {
    }
 
     render() {
-        debugger;
+        // debugger;
         let renderValue="";
         let addedData="";
-        if(this.state.isInserted)
-        addedData=<CircularIndeterminate/>;
-        else
+        if(this.state.isProcessing == null)
         {
-            addedData=<Fab variant="extended" aria-label="Add"  style={{ marginTop: '45%', marginLeft: '30%'}} >
-            {/* <AddIcon/> */}
-            <AlertDialog promoDetails={this.emptyPopupData} isAdd='true' afterCompleted={this.promoCodeInsertedSuccessfully}/>
-                </Fab>;
+            addedData=<TransitionGroup>{<Fab variant="extended" aria-label="Add"  style={{ marginTop: '45%', marginLeft: '30%'}} >
+            <AlertDialog promoDetails={this.emptyPopupData} isAdd='true' inProgressing={this.promocodeProcessing} afterCompleted={this.promoCodeInsertedSuccessfully}/>
+        </Fab>}</TransitionGroup>;
+        }
+        else if(this.state.isProcessing == true)
+            addedData=<TransitionGroup><CircularIndeterminate/></TransitionGroup>;
+        else{
+            addedData=<DoneOutlineOutlinedIcon style={{ color: 'green',marginTop:'54%',marginLeft:'40%' }}/>;
+            setTimeout(()=>{this.setState({['isProcessing']:null})},2000);
         }
 
         if(this.state.list.length>0)

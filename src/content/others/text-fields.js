@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import red from '@material-ui/core/colors/red';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteOutlinedIcon  from '@material-ui/icons/DeleteOutlined';
 import Autocomplete from 'react-autocomplete';
 
 const styles = theme => ({
@@ -172,8 +172,8 @@ class OutlinedTextFields extends React.Component {
         InputLabelProps={{
           shrink: true,
       }} required/>
-      <DeleteIcon className={classes.iconHover} color="error" style={{ fontSize: 30,cursor:'pointer' }} onClick={(e)=>{this.deleteProduct(index)}} >   
-          </DeleteIcon>
+      <DeleteOutlinedIcon  className={classes.iconHover} color="error" style={{ fontSize: 30,cursor:'pointer' }} onClick={(e)=>{this.deleteProduct(index)}} >   
+          </DeleteOutlinedIcon>
       </React.Fragment>))}</React.Fragment>;
     }
     else
