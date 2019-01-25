@@ -6,7 +6,8 @@ import PromoDetails from './promodetails';
 import CircularIndeterminate from './others/loading';
 import AlertDialog from './others/popup';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
-import TransitionGroup from 'react-addons-transition-group';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import  '../style.css';
 export default class PromoCode extends React.Component {
    
    constructor(){
@@ -20,7 +21,7 @@ export default class PromoCode extends React.Component {
     };
     this.getSalesManList();
     this.getProductList();
-    this.promoCodeInsertedSuccessfully=()=>{
+    this.promoCodeProcessCompleted=()=>{
         this.setState({
             ['isProcessing']:false
         })
@@ -41,22 +42,45 @@ export default class PromoCode extends React.Component {
     },1000);
     
    }
+   
 
     render() {
         // debugger;
         let renderValue="";
         let addedData="";
+        let promoCodeData="";
         if(this.state.isProcessing == null)
         {
-            addedData=<TransitionGroup>{<Fab variant="extended" aria-label="Add"  style={{ marginTop: '45%', marginLeft: '30%'}} >
-            <AlertDialog promoDetails={this.emptyPopupData} isAdd='true' inProgressing={this.promocodeProcessing} afterCompleted={this.promoCodeInsertedSuccessfully}/>
-        </Fab>}</TransitionGroup>;
+            addedData=<ReactCSSTransitionGroup transitionName = "example"
+            transitionAppear = {true} transitionAppearTimeout = {500}
+            transitionEnter = {false} transitionLeave = {false}><Fab variant="extended" aria-label="Add"  style={{ marginTop: '45%', marginLeft: '30%'}} >
+            <AlertDialog promoDetails={this.emptyPopupData} isAdd='true' inProgressing={this.promocodeProcessing} afterCompleted={this.promoCodeProcessCompleted}/>
+            </Fab></ReactCSSTransitionGroup>;
+            promoCodeData=this.state.list.map((value,index) => (
+                <Grid key={value.PromoId}  item>
+                  <span className={"badge badge-"+(this.state.extra[index].daysRemaining>0 ?"primary":"danger")} style={{float:'right'}}>{this.state.extra[index].daysRemaining}</span>
+                  <ReactCSSTransitionGroup transitionName = "grid"
+            transitionAppear = {true} transitionAppearTimeout = {500}
+            transitionEnter = {false} transitionLeave = {false}>
+                  <Paper className={ this.props.gridClass }>
+                    <PromoDetails promo={value} indexId={index}  salesManName={this.state.extra[index].salesManName} salesManDetail={this.salesManDetail} productDetail={this.productDetail} inProgressing={this.promocodeProcessing} afterCompleted={this.promoCodeProcessCompleted}/>
+                  </Paper>
+                  </ReactCSSTransitionGroup>
+                </Grid>
+              ));
         }
-        else if(this.state.isProcessing == true)
-            addedData=<TransitionGroup><CircularIndeterminate/></TransitionGroup>;
+        else if(this.state.isProcessing == true){
+            addedData=<ReactCSSTransitionGroup transitionName = "example"
+            transitionAppear = {true} transitionAppearTimeout = {500}
+            transitionEnter = {false} transitionLeave = {false}><CircularIndeterminate/></ReactCSSTransitionGroup>;
+            promoCodeData='';
+        }
         else{
-            addedData=<DoneOutlineOutlinedIcon style={{ color: 'green',marginTop:'54%',marginLeft:'40%' }}/>;
-            setTimeout(()=>{this.setState({['isProcessing']:null})},2000);
+            addedData=<ReactCSSTransitionGroup transitionName = "example"
+            transitionAppear = {true} transitionAppearTimeout = {500}
+            transitionEnter = {false} transitionLeave = {false}><DoneOutlineOutlinedIcon style={{ color: 'green',marginTop:'54%',marginLeft:'40%' }}/></ReactCSSTransitionGroup>;
+            setTimeout(()=>{this.setState({['isProcessing']:null});this.bindPromoCode();},2000);
+            promoCodeData='';
         }
 
         if(this.state.list.length>0)
@@ -65,14 +89,7 @@ export default class PromoCode extends React.Component {
                 <Paper className={ this.props.gridClass }>
                 {addedData}
                 </Paper>
-              </Grid>{this.state.list.map((value,index) => (
-                <Grid key={value.PromoId} item>
-                  <span className={"badge badge-"+(this.state.extra[index].daysRemaining>0 ?"primary":"danger")} style={{float:'right'}}>{this.state.extra[index].daysRemaining}</span>
-                  <Paper className={ this.props.gridClass }>
-                    <PromoDetails promo={value} indexId={index}  salesManName={this.state.extra[index].salesManName} salesManDetail={this.salesManDetail} productDetail={this.productDetail}/>
-                  </Paper>
-                </Grid>
-              ))}</React.Fragment>);
+              </Grid>{promoCodeData}</React.Fragment>);
         }
         else
         {
@@ -100,6 +117,7 @@ export default class PromoCode extends React.Component {
     bindPromoCode(){
         if(this.state!=undefined){
         let url="https://172.17.4.63/PromoService/PromoCodeManagement/GetAllPromoCodes";
+        // let url="https://json-request.firebaseio.com/.json";
         fetch(url).then(res=>res.json()).then((resp)=>{
                 let extraDetails=[],detail;
                 for(let promoId in resp)

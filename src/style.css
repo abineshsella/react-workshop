@@ -1,0 +1,15 @@
+.example-appear {
+    opacity: 0.01;
+ }
+ .example-appear.example-appear-active {
+    opacity: 1;
+    transition: opacity 1000ms ease-in;
+ }
+
+ .grid-appear {
+   opacity: 0.01;
+}
+.grid-appear.grid-appear-active {
+   opacity: 1;
+   transition: opacity 500ms ease-in;
+}

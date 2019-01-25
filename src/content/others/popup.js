@@ -83,22 +83,19 @@ class AlertDialog extends React.Component {
     );
   }
   updatePromoDetails(){
+    this.props.inProgressing();
     let url='http://172.17.4.63/PromoService/PromoCodeManagement/UpdatePromoCode';
     fetch(url,{method:'POST',headers:{'Content-Type': 'application/json'},  mode: 'cors',body: JSON.stringify(this.state.promoDetails)}).then((res)=>res.json()).then((resp)=>{
-      alert("Success");
+      this.props.afterCompleted();
     });
   }
   addPromoDetails(){
     //testing
     this.props.inProgressing();
-    setTimeout(()=>{this.props.afterCompleted();},2000)
-    
-    // let url='http://172.17.4.63/PromoService/PromoCodeManagement/InsertPromoCode';
-    // fetch(url,{method:'POST',headers:{'Content-Type': 'application/json'},  mode: 'cors',body: JSON.stringify(this.state.promoDetails)}).then((res)=>res.json()).then((resp)=>{
-    //   alert("Success");
-    //   debugger;
-    //   this.props.afterCompleted();
-    // });
+    let url='http://172.17.4.63/PromoService/PromoCodeManagement/InsertPromoCode';
+    fetch(url,{method:'POST',headers:{'Content-Type': 'application/json'},  mode: 'cors',body: JSON.stringify(this.state.promoDetails)}).then((res)=>res.json()).then((resp)=>{
+       this.props.afterCompleted();
+    });
   }
 }
 
