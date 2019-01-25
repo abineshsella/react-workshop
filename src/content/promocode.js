@@ -78,7 +78,10 @@ export default class PromoCode extends React.Component {
         else{
             addedData=<ReactCSSTransitionGroup transitionName = "example"
             transitionAppear = {true} transitionAppearTimeout = {500}
-            transitionEnter = {false} transitionLeave = {false}><DoneOutlineOutlinedIcon style={{ color: 'green',marginTop:'54%',marginLeft:'40%' }}/></ReactCSSTransitionGroup>;
+            transitionEnter = {false} transitionLeave = {false}>
+            {/* <DoneOutlineOutlinedIcon style={{ color: 'green',marginTop:'54%',marginLeft:'40%' }}/> */}
+            <img style={{width:'132px',height:'135px',marginTop:'22px',marginLeft:'9px'}} src={"/img/done.png"}></img>
+            </ReactCSSTransitionGroup>;
             setTimeout(()=>{this.setState({['isProcessing']:null});this.bindPromoCode();},2000);
             promoCodeData='';
         }

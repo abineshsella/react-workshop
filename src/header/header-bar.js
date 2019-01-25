@@ -15,8 +15,8 @@ const styles = theme => ({
     width: '100%'
   },
   header:{
-    // color:'black',
-    // backgroundColor:'#03a9f4'
+    color:'white',
+    backgroundColor:'#563d7c'
   },
   grow: {
     flexGrow: 1,
