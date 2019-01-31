@@ -44,14 +44,6 @@ class OutlinedTextFields extends React.Component {
       this.setState({
         [name]:event.target.value
       });
-      // if(name=='SalesMan_Name')
-      // {
-        // document.getElementsByTagName('input')[8].style.display='block';
-        // document.getElementsByTagName('input')[8].focus();
-        // document.getElementsByTagName('input')[8].click();
-        // document.getElementsByTagName('input')[8].style.display='block';
-        // event.target.focus();
-      // }
     }
     this.insertPromoCodeToTextField(props);
     this.completeSalesManDetails(props);
@@ -60,7 +52,7 @@ class OutlinedTextFields extends React.Component {
  
 
   addProduct(){
-      this.state.Product_Details.push({Product_Id:'',ProdValid_From:new Date(),ProdValid_To:new Date()});
+      this.state.Product_Details.push({Product_Id:'',ProdValid_From:this.formatDate(new Date()),ProdValid_To:this.formatDate(new Date())});
       this.setState({
         ['Product_Details']:this.state.Product_Details
       })
