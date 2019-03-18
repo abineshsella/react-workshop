@@ -169,6 +169,8 @@ export default class PromoCode extends React.Component {
                 if (val.id == salesManId)
                     return val.name;
             });
+            if(salesMan == null)
+                return "";
             return salesMan.name;
         }
     }
